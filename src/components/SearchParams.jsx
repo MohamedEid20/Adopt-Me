@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import Pet from "./Pet";
 import useBreedList from "../hooks/useBreedList";
+
 const ANIMALS = ["bird", "cat", "dog", "rabbit", "reptile"];
 
 const SearchParams = () => {
@@ -8,13 +9,15 @@ const SearchParams = () => {
   const [animal, setanimal] = useState("");
   const [breed, setbreed] = useState("");
   const [pets, setPets] = useState([]);
+
   const Breeds = useBreedList(animal);
-console.log(Breeds);
+
   useEffect(() => {
     const fetchPets = async () => {
       const res = await fetch(
         `http://pets-v2.dev-apis.com/pets?animal=${animal}&location=${location}&breed=${breed}`
       );
+
       const json = await res.json();
       setPets(json.pets);
     };
@@ -35,7 +38,7 @@ console.log(Breeds);
             placeholder="Location"
           />
         </label>
-        <label htmlFor="animals">
+        <label htmlFor="animal">
           Animal
           <select
             id="animal"
@@ -57,8 +60,8 @@ console.log(Breeds);
         <label htmlFor="Breed">
           Breed
           <select
-            id="breed"
             disabled={!Breeds.length}
+            id="breed"
             value={breed}
             onChange={(e) => {
               setbreed(e.target.value);
@@ -78,14 +81,16 @@ console.log(Breeds);
         {!pets.length ? (
           <h1>No Pets Found</h1>
         ) : (
-          pets.map((pet) => (
-            <Pet
-              key={pet.id}
-              name={pet.name}
-              animal={pet.animal}
-              breed={pet.breed}
-            />
-          ))
+          pets.map((pet) => {
+            return (
+              <Pet
+                key={pet.id}
+                animal={pet.animal}
+                name={pet.name}
+                breed={pet.breed}
+              />
+            );
+          })
         )}
       </div>
     </div>
